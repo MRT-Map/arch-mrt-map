@@ -1,0 +1,44 @@
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [update_stencil2]
+
+permissions:
+  contents: write
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: x86_64
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: awalsh128/cache-apt-pkgs-action@v1
+      with:
+        packages: pacman-package-manager libarchive-tools
+        version: 1.0
+
+    - run: |
+        mkdir stencil2
+        curl "https://github.com/MRT-Map/stencil2/raw/master/build/linux/PKGBUILD" -Lo stencil2/PKGBUILD
+
+    - uses: iiiii7d/archlinux-package-action@main
+      with:
+        path: x86_64/stencil2
+        flags: '-sr --noconfirm'
+        namcap: false
+        aur: true
+
+    - run: |
+        mv stencil2/*.pkg.tar.zst .
+        sudo rm -r stencil2
+
+    - run: repo-add arch-mrt-map.db.tar.gz *.pkg.tar.zst
+
+    - run: echo "message=update @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
+    - uses: EndBug/add-and-commit@v9
+      with:
+        default_author: github_actions
+        message: ${{ env.message }}
