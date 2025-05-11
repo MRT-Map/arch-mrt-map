@@ -2,6 +2,8 @@ on:
   workflow_dispatch:
   repository_dispatch:
     types: [update_stencil2]
+  push:
+    paths: [".github/workflows/*.yml"]
 
 permissions:
   contents: write
@@ -35,7 +37,7 @@ jobs:
     - run: mv stencil2/*.pkg.tar.zst .
     - run: repo-add -R arch-mrt-map.db.tar.gz *.pkg.tar.zst
 
-    - run: rm -r stencil2
+    - run: sudo rm -r stencil2
 
     - run: echo "message=update @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
     - uses: EndBug/add-and-commit@v9
