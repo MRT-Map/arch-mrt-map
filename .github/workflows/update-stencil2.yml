@@ -33,9 +33,6 @@ jobs:
 
     - run: repo-add -R arch-mrt-map.db.tar.gz stencil2/*.pkg.tar.zst
 
-    - run: |
-        sudo rm -r stencil2
-
     - run: echo "message=update @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
     - uses: EndBug/add-and-commit@v9
       with:
