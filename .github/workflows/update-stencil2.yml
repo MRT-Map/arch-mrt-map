@@ -31,6 +31,7 @@ jobs:
         namcap: false
         aur: true
 
+    - run: rm stencil2-*.pkg.tar.zst
     - run: mv stencil2/*.pkg.tar.zst .
     - run: repo-add -R arch-mrt-map.db.tar.gz *.pkg.tar.zst
 
