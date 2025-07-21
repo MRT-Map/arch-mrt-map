@@ -26,7 +26,7 @@ jobs:
         mkdir stencil2
         curl "https://github.com/MRT-Map/stencil2/raw/master/build/linux/PKGBUILD" -Lo stencil2/PKGBUILD
 
-    - uses: heyhusen/archlinux-package-action@main
+    - uses: iiiii7d/archlinux-package-action@main
       with:
         path: x86_64/stencil2
         flags: '-sr --noconfirm'
