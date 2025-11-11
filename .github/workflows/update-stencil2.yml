@@ -16,8 +16,8 @@ jobs:
         working-directory: x86_64
 
     steps:
-    - uses: actions/checkout@v5
-    - uses: awalsh128/cache-apt-pkgs-action@v1
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+    - uses: awalsh128/cache-apt-pkgs-action@2c09a5e66da6c8016428a2172bd76e5e4f14bb17 # v1
       with:
         packages: pacman-package-manager libarchive-tools
         version: 1.0
@@ -40,7 +40,7 @@ jobs:
     - run: sudo rm -r stencil2
 
     - run: echo "message=update @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
-    - uses: EndBug/add-and-commit@v9
+    - uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9
       with:
         default_author: github_actions
         message: ${{ env.message }}
