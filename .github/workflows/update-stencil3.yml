@@ -1,0 +1,55 @@
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [update_stencil3]
+  push:
+    branches: ["main"]
+    paths: [".github/workflows/*.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  trigger:
+    runs-on: ${{ matrix.runner }}
+    defaults:
+      run:
+        working-directory: ${{ matrix.arch }}
+    strategy:
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-latest
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+      max-parallel: 1
+
+    steps:
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05 # v1.6.0
+      with:
+        packages: pacman-package-manager libarchive-tools
+        version: 1.0
+
+    - run: |
+        mkdir stencil2
+        curl "https://github.com/MRT-Map/stencil3/raw/master/build/linux/PKGBUILD" -Lo stencil3/PKGBUILD
+
+    - uses: iiiii7d/archlinux-package-action@main
+      with:
+        path: ${{ matrix.arch }}/stencil3
+        flags: '-sr --noconfirm'
+        namcap: false
+        aur: true
+
+    - run: rm stencil3-*.pkg.tar.zst
+    - run: mv stencil3/*.pkg.tar.zst .
+    - run: repo-add -R arch-mrt-map.db.tar.gz *.pkg.tar.zst
+
+    - run: sudo rm -r stencil3
+
+    - run: echo "message=update @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
+    - uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
+      with:
+        default_author: github_actions
+        message: ${{ env.message }}
