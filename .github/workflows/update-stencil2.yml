@@ -4,7 +4,7 @@ on:
     types: [update_stencil2]
   push:
     branches: ["main"]
-    paths: [".github/workflows/*.yml"]
+    paths: [".github/workflows/update-stencil2.yml"]
 
 permissions:
   contents: write
@@ -25,7 +25,7 @@ jobs:
 
     - run: |
         mkdir stencil2
-        curl "https://github.com/MRT-Map/stencil2/raw/master/build/linux/PKGBUILD" -Lo stencil2/PKGBUILD
+        curl "https://github.com/MRT-Map/stencil2/raw/v2/build/linux/PKGBUILD" -Lo stencil2/PKGBUILD
 
     - uses: iiiii7d/archlinux-package-action@main
       with:
