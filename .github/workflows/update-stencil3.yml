@@ -32,7 +32,7 @@ jobs:
         version: 1.0
 
     - run: |
-        mkdir stencil2
+        mkdir stencil3
         curl "https://github.com/MRT-Map/stencil3/raw/master/build/linux/PKGBUILD" -Lo stencil3/PKGBUILD
 
     - uses: iiiii7d/archlinux-package-action@main
