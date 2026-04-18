@@ -11,17 +11,13 @@ permissions:
 
 jobs:
   trigger:
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ${{ matrix.arch }}
     strategy:
       matrix:
-        include:
-          - arch: x86_64
-            runner: ubuntu-latest
-          - arch: aarch64
-            runner: ubuntu-24.04-arm
+        arch: [ x86_64, aarch64 ]
       max-parallel: 1
 
     steps:
@@ -41,6 +37,8 @@ jobs:
         flags: '-sr --noconfirm'
         namcap: false
         aur: true
+      env:
+        CARCH: ${{ matrix.arch }}
 
     - run: rm stencil3-*.pkg.tar.zst || true
     - run: mv stencil3/*.pkg.tar.zst .
