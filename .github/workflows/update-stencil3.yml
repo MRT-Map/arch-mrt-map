@@ -31,7 +31,7 @@ jobs:
         mkdir stencil3
         curl "https://github.com/MRT-Map/stencil3/raw/master/build/linux/PKGBUILD" -Lo stencil3/PKGBUILD
 
-    - uses: iiiii7d/archlinux-package-action@main
+    - uses: iiiii7d/archlinux-package-action@fc72e5d53b81bfd29811a1dde55da89ae2f08a93 # main
       with:
         path: ${{ matrix.arch }}/stencil3
         flags: '-sr --noconfirm'
